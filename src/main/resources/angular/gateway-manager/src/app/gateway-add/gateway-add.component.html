@@ -1,0 +1,21 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">Add Gateway</div>
+  <div class="panel-body">
+    <form [formGroup]="gatewayForm">
+      <label>
+        Name:<br/>
+        <input type="text" formControlName="name" required minlength="2" maxlength="255">
+      </label><br/>
+      <label>
+        Serial:<br/>
+        <input type="text" formControlName="serial" required minlength="2" maxlength="255">
+      </label><br/>
+      <label>
+        IPv4 Address:<br/>
+        <input type="text" formControlName="ipv4Address" required>
+      </label><br/>
+      <button mat-raised-button color="primary" (click)="addGateway()" [disabled]="!gatewayForm.valid">Add</button>
+    </form>
+    <br/>
+  </div>
+</div>

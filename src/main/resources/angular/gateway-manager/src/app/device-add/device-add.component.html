@@ -1,0 +1,32 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">{{ title }}</div>
+  <div class="panel-body">
+    <form [formGroup]="deviceForm">
+      <label>
+        UID:<br/>
+        <input type="number" formControlName="uid" required minlength="2" maxlength="255">
+      </label><br/>
+      <label>
+        Vendor:<br/>
+        <input type="text" formControlName="vendor" required minlength="2" maxlength="255">
+      </label><br/>
+      <label>
+        Status:<br/>
+        <select formControlName="status" required>
+          <option *ngFor="let status of statusTypes" [ngValue]="status">
+            {{ status }}
+          </option>
+        </select>
+      </label><br/>
+      <label>
+        Gateway:<br/>
+        <select formControlName="gateway" required>
+          <option *ngFor="let gateway of gateways" [ngValue]="gateway.id">
+            {{ gateway.name }}
+          </option>
+        </select>
+      </label><br/>
+      <button mat-raised-button color="primary" (click)="addDevice()" [disabled]="!deviceForm.valid">Add</button>
+    </form>
+  </div>
+</div>
