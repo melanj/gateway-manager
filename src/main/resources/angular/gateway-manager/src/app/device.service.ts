@@ -25,6 +25,14 @@ export class DeviceService {
       );
   }
 
+  getDevicesByGatewayId(id: number): Observable<Device[]> {
+    return this.http.get<Device[]>(this.devicesUrl + '?gateway_id=' + id)
+      .pipe(
+        tap(_ => console.log('fetched devices for gateway ' + id)),
+        catchError(this.handleError<Device[]>('getDevices', []))
+      );
+  }
+
   getDevice(id: number): Observable<Device> {
     const url = `${this.devicesUrl}/${id}`;
     return this.http.get<Device>(url).pipe(

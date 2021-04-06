@@ -23,7 +23,7 @@ export class GatewayDetailsComponent implements OnInit {
     const gatewayId = Number(routeParams.get('gatewayId'));
     this.gatewayService.getGateway(gatewayId)
       .subscribe(gateway => this.gateway = gateway);
-    this.deviceService.getDevices()
+    this.deviceService.getDevicesByGatewayId(gatewayId)
       .subscribe(devices => this.devices = devices);
   }
 
