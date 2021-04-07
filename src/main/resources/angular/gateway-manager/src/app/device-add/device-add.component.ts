@@ -33,8 +33,8 @@ export class DeviceAddComponent implements OnInit {
         if (this.gatewayId > 0) {
           this.title = 'Add a device to ' + this.gateways.filter(
             gateway => gateway.id === this.gatewayId)[0].name;
-          this.deviceForm.get('gateway').setValue(this.gatewayId)
-          this.deviceForm.get('gateway').disable()
+          this.deviceForm.get('gateway').setValue(this.gatewayId);
+          this.deviceForm.get('gateway').disable();
         }
       });
   }
@@ -48,13 +48,15 @@ export class DeviceAddComponent implements OnInit {
   });
 
   addDevice() {
-    this.deviceService.addDevice(this.deviceForm.value)
-      .subscribe(device => this.device = device);
-    if (this.gatewayId > 0) {
-      this._router.navigate(['/gateways/' + this.gatewayId])
-    } else {
-      this._router.navigate(['/'])
-    }
+    this.deviceService.addDevice(this.deviceForm.getRawValue())
+      .subscribe(device => {
+        this.device = device
+        if (this.gatewayId > 0) {
+          this._router.navigate(['/gateways/' + this.gatewayId])
+        } else {
+          this._router.navigate(['/'])
+        }
+      });
   }
 
 }

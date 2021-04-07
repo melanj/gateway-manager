@@ -3,12 +3,14 @@
   <div class="panel-body">
     <div>
       <p>Name : {{ gateway.name }}</p>
-      <p>Capital: {{ gateway.serial}}</p>
+      <p>Serial: {{ gateway.serial}}</p>
       <p>IPv4 Address: {{ gateway.ipv4Address}}</p>
     </div>
     <div class="panel panel-default">
       <div class="panel-heading">Devices</div>
       <div class="panel-body">
+        <button mat-button routerLink="/gateways/{{gateway.id}}/add-device" mat-flat-button color="primary">Add Device</button>
+        <br/>
         <table mat-table [dataSource]="devices" class="mat-elevation-z8">
           <ng-container matColumnDef="uid">
             <th mat-header-cell *matHeaderCellDef> UID</th>

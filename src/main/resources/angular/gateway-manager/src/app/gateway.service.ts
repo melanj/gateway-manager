@@ -9,13 +9,14 @@ import {Gateway} from "./gateway";
 })
 export class GatewayService {
 
-  private gatewaysUrl = 'api/gateways';
 
+  private gatewaysUrl = 'api/gateways';
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getGateways(): Observable<Gateway[]> {
     return this.http.get<Gateway[]>(this.gatewaysUrl)
@@ -38,6 +39,10 @@ export class GatewayService {
       .pipe(
         catchError(this.handleError('addGateway', gateway))
       );
+  }
+
+  deleteGateway(id: number): Observable<Object> {
+    return this.http.delete(`${this.gatewaysUrl}/${id}`)
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

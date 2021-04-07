@@ -17,7 +17,8 @@ export class GatewayAddComponent implements OnInit {
   gatewayForm = new FormGroup({
     name: new FormControl('', Validators.required),
     serial: new FormControl('', Validators.required),
-    ipv4Address: new FormControl('', Validators.required),
+    ipv4Address: new FormControl('', [Validators.required,
+      Validators.pattern('(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)')]),
   });
 
   ngOnInit(): void {
@@ -25,8 +26,10 @@ export class GatewayAddComponent implements OnInit {
 
   addGateway() {
     this.gatewayService.addGateway(this.gatewayForm.value)
-      .subscribe(gateway => this.gateway = gateway);
-    this._router.navigate(['/'])
+      .subscribe(gateway => {
+        this.gateway = gateway;
+        this._router.navigate(['/']);
+      });
   }
 
 }

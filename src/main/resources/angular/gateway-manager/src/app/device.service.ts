@@ -48,6 +48,10 @@ export class DeviceService {
       );
   }
 
+  deleteDevice(id: number): Observable<Object> {
+    return this.http.delete(`${this.devicesUrl}/${id}`);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);

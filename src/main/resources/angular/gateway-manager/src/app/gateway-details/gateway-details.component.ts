@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {GatewayService} from "../gateway.service";
 import {DeviceService} from "../device.service";
 import {Device} from "../device";
@@ -11,23 +11,38 @@ import {Device} from "../device";
 })
 export class GatewayDetailsComponent implements OnInit {
   gateway;
-  devices : Device[];
+  devices: Device[];
   displayedColumns: string[] = ['uid', 'vendor', 'dateCreated', 'status', 'actions'];
 
   constructor(private route: ActivatedRoute,
               private gatewayService: GatewayService,
-              private deviceService: DeviceService) { }
+              private deviceService: DeviceService,
+              private changeDetectorRefs: ChangeDetectorRef) {
+  }
 
   ngOnInit(): void {
+    this.refresh();
+  }
+
+  private refresh() {
     const routeParams = this.route.snapshot.paramMap;
     const gatewayId = Number(routeParams.get('gatewayId'));
     this.gatewayService.getGateway(gatewayId)
       .subscribe(gateway => this.gateway = gateway);
     this.deviceService.getDevicesByGatewayId(gatewayId)
       .subscribe(devices => this.devices = devices);
+    this.changeDetectorRefs.detectChanges();
   }
 
   deleteDevice(id) {
-
+    this.deviceService.deleteDevice(id).subscribe({
+      next: data => {
+        console.info('Delete successful');
+        this.refresh();
+      },
+      error: error => {
+        console.error('There was an error!', error);
+      }
+    });
   }
 }

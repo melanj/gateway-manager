@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {GatewayService} from "../gateway.service";
 import {Gateway} from "../gateway";
 import {Router} from "@angular/router";
@@ -13,10 +13,15 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'serial', 'ipv4Address', 'actions'];
 
   constructor(private _router: Router,
-              private gatewayService: GatewayService) {
+              private gatewayService: GatewayService,
+              private changeDetectorRefs: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
+    this.refresh();
+  }
+
+  private refresh() {
     this.gatewayService.getGateways()
       .subscribe(gateways => this.gateways = gateways);
   }
@@ -26,7 +31,14 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteGateway(id) {
-    //http://www.techtutorhub.com/article/Learn-how-to-show-Angular-Material-Confirm-Dialog-Box-with-Easy-Implementation/71
-    alert(id);
+    this.gatewayService.deleteGateway(id).subscribe({
+      next: data => {
+        console.info('Delete successful');
+        this.refresh();
+      },
+      error: error => {
+        console.error('There was an error!', error);
+      }
+    });
   }
 }

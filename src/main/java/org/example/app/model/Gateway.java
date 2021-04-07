@@ -1,12 +1,8 @@
 package org.example.app.model;
 
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +26,7 @@ public class Gateway {
     @Column(nullable = false, unique = true)
     private Integer ipv4Address;
 
-    @OneToMany(mappedBy = "gateway")
+    @OneToMany(mappedBy = "gateway", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Device> gatewayDevices;
 
 }
