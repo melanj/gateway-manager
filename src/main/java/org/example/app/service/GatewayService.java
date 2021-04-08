@@ -39,12 +39,14 @@ public class GatewayService {
     }
 
     public Long create(final GatewayDTO gatewayDTO) {
+        validateGatewayIP(gatewayDTO);
         final Gateway gateway = new Gateway();
         dtoToGateway(gatewayDTO, gateway);
         return gatewayRepository.save(gateway).getId();
     }
 
     public void update(final Long id, final GatewayDTO gatewayDTO) {
+        validateGatewayIP(gatewayDTO);
         final Gateway gateway = gatewayRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         dtoToGateway(gatewayDTO, gateway);
