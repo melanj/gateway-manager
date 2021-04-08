@@ -163,3 +163,11 @@ $ java -jar target/gateway-admin-app-1.0.0-SNAPSHOT.jar
 2021-04-08 17:42:08.779  INFO 14310 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
 2021-04-08 17:58:29.445  INFO 14310 --- [io-8080-exec-10] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 680 ms
 ```
+
+## how to see coverage
+
+Tests can be run using following maven command and test reports are available at 'target/site/jacoco/index.html'
+
+```bash
+mvn clean test jacoco:report
+```

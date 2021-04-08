@@ -8,15 +8,19 @@ import org.example.app.repository.GatewayRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-public class ConversionUtils {
+public final class ConversionUtils {
 
-    public static  DeviceDTO deviceToDTO(final Device device, final DeviceDTO deviceDTO) {
+    private ConversionUtils() {
+        
+    }
+
+    public static DeviceDTO deviceToDTO(final Device device, final DeviceDTO deviceDTO) {
         deviceDTO.setId(device.getId());
         deviceDTO.setUid(device.getUid());
         deviceDTO.setVendor(device.getVendor());
         deviceDTO.setDateCreated(device.getDateCreated());
         deviceDTO.setStatus(device.getStatus());
-        deviceDTO.setGateway(device.getGateway() == null ? null : device.getGateway().getId());
+        deviceDTO.setGateway(device.getGateway().getId());
         return deviceDTO;
     }
 
@@ -25,8 +29,7 @@ public class ConversionUtils {
         device.setVendor(deviceDTO.getVendor());
         device.setDateCreated(deviceDTO.getDateCreated());
         device.setStatus(deviceDTO.getStatus());
-        if (deviceDTO.getGateway() != null &&
-                (device.getGateway() == null || !device.getGateway().getId().equals(deviceDTO.getGateway()))) {
+        if ((device.getGateway() == null || !device.getGateway().getId().equals(deviceDTO.getGateway()))) {
             final Gateway gateway = gatewayRepository.findById(deviceDTO.getGateway())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "gateway not found"));
             device.setGateway(gateway);
@@ -58,16 +61,16 @@ public class ConversionUtils {
             long ip = Long.parseLong(ipAddressInArray[3 - i]);
             result |= ip << (i * 8);
         }
-        return (int)(result - Integer.MAX_VALUE);
+        return (int) (result - Integer.MAX_VALUE);
     }
 
     public static String longToIp(int src) {
         long ip = Integer.MAX_VALUE + (long) src;
         StringBuilder result = new StringBuilder(15);
         for (int i = 0; i < 4; i++) {
-            result.insert(0,Long.toString(ip & 0xff));
+            result.insert(0, Long.toString(ip & 0xff));
             if (i < 3) {
-                result.insert(0,'.');
+                result.insert(0, '.');
             }
             ip = ip >> 8;
         }

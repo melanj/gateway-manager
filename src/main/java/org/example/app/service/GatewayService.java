@@ -58,9 +58,8 @@ public class GatewayService {
     }
 
     private void validateGatewayIP(GatewayDTO gatewayDTO) {
-        if (!(Objects.nonNull(gatewayDTO.getIpv4Address()) &&
-                (gatewayDTO.getIpv4Address().matches(IPV4_PATTERN)))) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+        if (!gatewayDTO.getIpv4Address().matches(IPV4_PATTERN)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Gateway IPv4 address is not valid");
         }
     }
