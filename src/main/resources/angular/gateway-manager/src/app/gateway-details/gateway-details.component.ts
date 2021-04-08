@@ -3,6 +3,8 @@ import {ActivatedRoute} from '@angular/router';
 import {GatewayService} from "../gateway.service";
 import {DeviceService} from "../device.service";
 import {Device} from "../device";
+import {ConfirmDialogComponent, ConfirmDialogModel} from "../confirm-dialog/confirm-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-gateway-details',
@@ -17,7 +19,8 @@ export class GatewayDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private gatewayService: GatewayService,
               private deviceService: DeviceService,
-              private changeDetectorRefs: ChangeDetectorRef) {
+              private changeDetectorRefs: ChangeDetectorRef,
+              private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -32,6 +35,20 @@ export class GatewayDetailsComponent implements OnInit {
     this.deviceService.getDevicesByGatewayId(gatewayId)
       .subscribe(devices => this.devices = devices);
     this.changeDetectorRefs.detectChanges();
+  }
+
+  deleteDeviceWithConfirm(id) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: new ConfirmDialogModel("Confirm Delete",
+        'Are you sure you want to delete selected device?')
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.deleteDevice(id);
+      }
+    });
   }
 
   deleteDevice(id) {

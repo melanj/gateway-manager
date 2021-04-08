@@ -41,11 +41,11 @@ export class DeviceService {
     );
   }
 
-  addDevice(device: Device): Observable<Device> {
-    return this.http.post<Device>(this.devicesUrl, device, this.httpOptions)
-      .pipe(
-        catchError(this.handleError('addDevice', device))
-      );
+  addDevice(device: Device): Observable<Object> {
+    return this.http.post<Device>(this.devicesUrl, device, this.httpOptions);
+     // .pipe(
+     //   catchError(this.handleError('addDevice', device))
+     // );
   }
 
   deleteDevice(id: number): Observable<Object> {

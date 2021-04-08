@@ -2,6 +2,8 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {GatewayService} from "../gateway.service";
 import {Gateway} from "../gateway";
 import {Router} from "@angular/router";
+import {ConfirmDialogComponent, ConfirmDialogModel} from "../confirm-dialog/confirm-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +16,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(private _router: Router,
               private gatewayService: GatewayService,
-              private changeDetectorRefs: ChangeDetectorRef) {
+              private changeDetectorRefs: ChangeDetectorRef,
+              private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -28,6 +31,20 @@ export class DashboardComponent implements OnInit {
 
   openGateway(id) {
     this._router.navigate(['gateways/' + id]);
+  }
+
+  deleteGatewayWithConfirm(id) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: "400px",
+      data: new ConfirmDialogModel("Confirm Delete",
+        'Are you sure you want to delete selected gateway?')
+    });
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.deleteGateway(id);
+      }
+    });
   }
 
   deleteGateway(id) {

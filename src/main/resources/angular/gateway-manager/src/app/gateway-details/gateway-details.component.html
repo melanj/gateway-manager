@@ -31,7 +31,7 @@
           <ng-container matColumnDef="actions">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
-              <button mat-icon-button (click)="deleteDevice(row.id)">
+              <button mat-icon-button (click)="deleteDeviceWithConfirm(row.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </mat-cell>

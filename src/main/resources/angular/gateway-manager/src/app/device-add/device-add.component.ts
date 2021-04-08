@@ -5,23 +5,27 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Gateway} from "../gateway";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Status} from "../status.enum";
+import {MatDialog} from "@angular/material/dialog";
+import {CommonAddComponent} from "../common-add.component";
 
 @Component({
   selector: 'app-device-add',
   templateUrl: './device-add.component.html',
   styleUrls: ['./device-add.component.scss']
 })
-export class DeviceAddComponent implements OnInit {
+export class DeviceAddComponent extends CommonAddComponent implements OnInit {
   device;
   gateways: Gateway[];
   statusTypes = Object.values(Status);
   gatewayId;
   title = 'Add Device';
 
-  constructor(private _router: Router,
+  constructor(public _router: Router,
               private route: ActivatedRoute,
               private deviceService: DeviceService,
-              private gatewayService: GatewayService) {
+              private gatewayService: GatewayService,
+              public dialog: MatDialog) {
+    super(_router, dialog);
   }
 
   ngOnInit(): void {
@@ -49,12 +53,18 @@ export class DeviceAddComponent implements OnInit {
 
   addDevice() {
     this.deviceService.addDevice(this.deviceForm.getRawValue())
-      .subscribe(device => {
-        this.device = device
-        if (this.gatewayId > 0) {
-          this._router.navigate(['/gateways/' + this.gatewayId])
-        } else {
-          this._router.navigate(['/'])
+      .subscribe({
+        next: device => {
+          console.info('add successful');
+          this.device = device
+          if (this.gatewayId > 0) {
+            this._router.navigate(['/gateways/' + this.gatewayId])
+          } else {
+            this._router.navigate(['/'])
+          }
+        },
+        error: error => {
+          this.showErrorAndNavigate(error);
         }
       });
   }

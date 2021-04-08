@@ -13,6 +13,9 @@ import {HttpClientModule} from "@angular/common/http";
 import {MatTableModule} from '@angular/material/table';
 import {GatewayDetailsComponent} from './gateway-details/gateway-details.component';
 import {DeviceAddComponent} from './device-add/device-add.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import { InformationDialogComponent } from './information-dialog/information-dialog.component';
 
 
 @NgModule({
@@ -21,7 +24,9 @@ import {DeviceAddComponent} from './device-add/device-add.component';
     DashboardComponent,
     GatewayAddComponent,
     GatewayDetailsComponent,
-    DeviceAddComponent
+    DeviceAddComponent,
+    ConfirmDialogComponent,
+    InformationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -32,12 +37,13 @@ import {DeviceAddComponent} from './device-add/device-add.component';
       {path: 'gateways/:gatewayId', component: GatewayDetailsComponent},
       {path: 'add-device', component: DeviceAddComponent},
       {path: 'gateways/:gatewayId/add-device', component: DeviceAddComponent},
-    ], {enableTracing: true}),
+    ]),
     MatButtonModule,
     MatIconModule,
     NoopAnimationsModule,
     ReactiveFormsModule,
-    MatTableModule
+    MatTableModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

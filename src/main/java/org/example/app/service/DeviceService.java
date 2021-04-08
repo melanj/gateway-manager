@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.example.app.util.ConversionUtils.deviceToDTO;
+import static org.example.app.util.ConversionUtils.dtoToDevice;
+
 
 @Service
 public class DeviceService {
@@ -36,55 +39,39 @@ public class DeviceService {
         }
         return deviceList
                 .stream()
-                .map(device -> mapToDTO(device, new DeviceDTO()))
+                .map(device -> deviceToDTO(device, new DeviceDTO()))
                 .collect(Collectors.toList());
     }
 
     public DeviceDTO get(final Long id) {
         return deviceRepository.findById(id)
-                .map(device -> mapToDTO(device, new DeviceDTO()))
+                .map(device -> deviceToDTO(device, new DeviceDTO()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     public Long create(final DeviceDTO deviceDTO) {
+        List<DeviceDTO> devicesInGateway = findAll(Optional.of(deviceDTO.getGateway()));
+        if (devicesInGateway.size() >= 10) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "You have exceeded the maximum number of devices allowed for this gateway.");
+        }
+        if(findAll(Optional.empty()).stream().anyMatch(f -> f.getUid().equals(deviceDTO.getUid()))){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "A device with same UID already exist.");
+        }
         final Device device = new Device();
-        mapToEntity(deviceDTO, device);
+        dtoToDevice(deviceDTO, device, gatewayRepository);
         return deviceRepository.save(device).getId();
     }
 
     public void update(final Long id, final DeviceDTO deviceDTO) {
         final Device device = deviceRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        mapToEntity(deviceDTO, device);
+        dtoToDevice(deviceDTO, device, gatewayRepository);
         deviceRepository.save(device);
     }
 
     public void delete(final Long id) {
         deviceRepository.deleteById(id);
     }
-
-    private DeviceDTO mapToDTO(final Device device, final DeviceDTO deviceDTO) {
-        deviceDTO.setId(device.getId());
-        deviceDTO.setUid(device.getUid());
-        deviceDTO.setVendor(device.getVendor());
-        deviceDTO.setDateCreated(device.getDateCreated());
-        deviceDTO.setStatus(device.getStatus());
-        deviceDTO.setGateway(device.getGateway() == null ? null : device.getGateway().getId());
-        return deviceDTO;
-    }
-
-    private Device mapToEntity(final DeviceDTO deviceDTO, final Device device) {
-        device.setUid(deviceDTO.getUid());
-        device.setVendor(deviceDTO.getVendor());
-        device.setDateCreated(deviceDTO.getDateCreated());
-        device.setStatus(deviceDTO.getStatus());
-        if (deviceDTO.getGateway() != null &&
-                (device.getGateway() == null || !device.getGateway().getId().equals(deviceDTO.getGateway()))) {
-            final Gateway gateway = gatewayRepository.findById(deviceDTO.getGateway())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "gateway not found"));
-            device.setGateway(gateway);
-        }
-        return device;
-    }
-
 }
