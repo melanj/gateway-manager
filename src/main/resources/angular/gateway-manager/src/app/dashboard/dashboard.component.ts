@@ -4,6 +4,7 @@ import {Gateway} from "../gateway";
 import {Router} from "@angular/router";
 import {ConfirmDialogComponent, ConfirmDialogModel} from "../confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {AuthenticationService} from "../authentication.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +18,8 @@ export class DashboardComponent implements OnInit {
   constructor(private _router: Router,
               private gatewayService: GatewayService,
               private changeDetectorRefs: ChangeDetectorRef,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              public loginService:AuthenticationService) {
   }
 
   ngOnInit(): void {

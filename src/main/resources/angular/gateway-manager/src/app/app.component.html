@@ -5,8 +5,10 @@
     </div>
     <ul class="nav navbar-nav">
       <li class="active"><a routerLink="/">Home</a></li>
-      <li><a routerLink="/add-gateway">Add Gateway</a></li>
-      <li><a routerLink="add-device">Add Device</a></li>
+      <li><a *ngIf="loginService.isUserLoggedIn()" routerLink="/add-gateway">Add Gateway</a></li>
+      <li><a *ngIf="loginService.isUserLoggedIn()" routerLink="add-device">Add Device</a></li>
+      <li><a *ngIf="!loginService.isUserLoggedIn()" routerLink="/login" class="nav-link">Login</a></li>
+      <li><a *ngIf="loginService.isUserLoggedIn()" routerLink="/logout" class="nav-link">LogOut</a></li>
     </ul>
   </div>
 </nav>

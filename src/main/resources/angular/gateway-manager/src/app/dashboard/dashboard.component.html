@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default" *ngIf="loginService.isUserLoggedIn()">
   <div class="panel-heading">Gateway list</div>
   <div class="panel-body">
     <table mat-table [dataSource]="gateways" class="mat-elevation-z8">
